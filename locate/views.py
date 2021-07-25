@@ -27,7 +27,8 @@ class ServiceAreaList(generics.CreateAPIView):
         return queryset.filter(provider=Provider.objects.get(pk=self.kwargs['pk']))
     
     def perform_create(self, serializer):
-        serializer.save(provider=self.kwargs['pk'])
+        data = Provider.objects.get(pk=self.kwargs['pk'])
+        serializer.save(provider=data)
 
 class ServiceAreaDetail(generics.RetrieveUpdateDestroyAPIView):
     """Create view to give detail, update or delete a Service area"""
