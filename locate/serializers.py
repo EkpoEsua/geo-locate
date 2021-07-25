@@ -1,48 +1,48 @@
 from rest_framework import serializers
 from .models import Provider, ServiceArea, Coordinate
 
-class ProviderSerializer(serializers.HyperlinkedModelSerializer):
-    # service_areas = serializers.PrimaryKeyRelatedField(
-    #     many=True,
-    #     queryset=ServiceArea.objects.all()
-    # )
-    service_areas = serializers.HyperlinkedIdentityField(
+class ProviderSerializer(serializers.ModelSerializer):
+    service_areas = serializers.PrimaryKeyRelatedField(
         many=True,
-        view_name='locate:service_area-detail',
-        lookup_field='pk'
+        queryset=ServiceArea.objects.all()
     )
-    url = serializers.HyperlinkedIdentityField(
-        view_name='locate:provider-detail',
-        lookup_field='pk'
-    )
+    # service_areas = serializers.HyperlinkedIdentityField(
+    #     many=True,
+    #     view_name='locsate:service-area-detail',
+    #     lookup_field='pk'
+    # )
+    # url = serializers.HyperlinkedIdentityField(
+    #     view_name='locate:provider-detail',
+    #     lookup_field='pk'
+    # )
 
 
     class Meta:
         model = Provider
         fields = [
-            'url', 'id', 'name',
+            'id', 'name',
             'email', 'phone_number', 'language',
             'currency', 'service_areas',
         ]
 
-class CoordinateSerializer(serializers.HyperlinkedModelSerializer):
+class CoordinateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coordinate
         fields = ['latitude', 'longitude', 'service_area']
         read_only_fields = ['service_area']
 
-class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
+class ServiceAreaSerializer(serializers.ModelSerializer):
     coordinates = CoordinateSerializer(many=True)
     provider = serializers.ReadOnlyField(source='provider.name')
-    url = serializers.HyperlinkedIdentityField(
-        view_name='locate:service_area-detail',
-        lookup_field='pk'
-    )
+    # url = serializers.HyperlinkedIdentityField(
+    #     view_name='locate:service-area-detail',
+    #     lookup_field='pk'
+    # )
 
     class Meta:
         model = ServiceArea
         fields = [
-            'url', 'name', 'price',
+            'name', 'price',
             'coordinates', 'provider'
         ]
 
@@ -63,7 +63,6 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
                 longitude=coordinate['longitude'],
                 service_area=service_area
             )
-        
         print()
         print('done!')
         print()

@@ -10,11 +10,11 @@ urlpatterns = [
     path(
         'providers/<int:pk>/service-area/', 
          views.ServiceAreaList.as_view(),
-         name='service_area-list'
+         name='service-area-list'
     ),
     path(
         'service-area/<int:pk>/', 
          views.ServiceAreaDetail.as_view(),
-         name='service_area-detail'
+         name='service-area-detail'
     ),
 ]
