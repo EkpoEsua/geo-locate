@@ -22,4 +22,6 @@
 
 `python manage.py runserver`
 
-Access on http://127.0.0.1:8000/providers
+Access locally on: http://127.0.0.1:8000/providers
+
+Hosted on: https://esuaekpo.pythonanywhere.com/providers/
