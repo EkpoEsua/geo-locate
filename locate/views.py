@@ -88,7 +88,7 @@ class Locate(generics.ListAPIView):
         latitude = self.request.GET['lat']
         longitude = self.request.GET['lon']
 
-        point = Point(int(latitude), int(longitude))
+        point = Point(float(latitude), float(longitude))
 
         serializer = self.get_serializer_class()
 

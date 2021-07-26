@@ -20,8 +20,6 @@ geojson_error_messages =  {
     'max_string_length': message
 }
 
-value = serializers.FloatField()
-coordinate = serializers.ListField(value, min_length=2, max_length=2)
 
 class ProviderSerializer(serializers.HyperlinkedModelSerializer):
     service_areas = serializers.HyperlinkedRelatedField(
