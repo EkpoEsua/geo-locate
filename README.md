@@ -24,4 +24,13 @@
 
 Access locally on: http://127.0.0.1:8000/providers
 
-Hosted on: https://esuaekpo.pythonanywhere.com/providers/
+
+Hosted on: https://esuaekpo.pythonanywhere.com/
+
+* providers/ - CRUD endpoint for providers
+
+* providers/<pk>/service-area/ - CRUD endpoint for service area associated with a created provider, access via `"service_area_list"` key in response after creating provider
+pk - primary key of existing provider
+
+* locate/ - api for searching for service areas in a specific point 
+    sample query parameters: ?lat=1&lon=2 - values must be intergers

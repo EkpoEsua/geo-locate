@@ -124,7 +124,8 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
 
 
     def to_representation(self, instance):
-        # assert(False)
+        """ override base implementation, to return a service area object in a geojson format
+        """
         ret = OrderedDict()
         fields = self._readable_fields
 

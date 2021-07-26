@@ -1,10 +1,15 @@
 from django.urls import path
+from django.urls.base import reverse_lazy
 from django.views.generic.base import RedirectView
 from locate import views
 
 # app_name = 'locate'
 urlpatterns = [
-    # path('', RedirectView(url=())),
+    path(
+        '',
+        RedirectView.as_view(url=reverse_lazy('provider-list')),
+        name='home'
+    ),
     path(
         'providers/',
         views.ProviderList.as_view(),
@@ -34,5 +39,10 @@ urlpatterns = [
         'coordinates/<int:pk>', 
          views.CoordinateDetail.as_view(),
          name='coordinate-detail'
+    ),
+    path(
+        'locate/', 
+         views.Locate.as_view(),
+         name='locate'
     ),
 ]
