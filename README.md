@@ -18,6 +18,9 @@
 
 `pip install -r requirments.txt`
 
+## Run Tests
+`python manage.py test locate`
+
 ## Run server
 
 `python manage.py runserver`
