@@ -7,7 +7,7 @@ from rest_framework.relations import PKOnlyObject
 from .models import Provider, ServiceArea, Coordinate
 
 message = 'Invalid geojson data'
-geojson_error_messages =  {
+geojson_error_messages = {
     'incorrect_type': message,
     'incorrect_format': message,
     'not_a_list': message,
@@ -40,6 +40,7 @@ class ProviderSerializer(serializers.HyperlinkedModelSerializer):
             'currency', 'service_area_list', 'service_areas'
         ]
 
+
 class CoordinateSerializer(serializers.HyperlinkedModelSerializer):
     service_area = serializers.ReadOnlyField(source='service_area.name')
 
@@ -50,19 +51,20 @@ class CoordinateSerializer(serializers.HyperlinkedModelSerializer):
 
 class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
     coordinates = serializers.ListField(
+        child=serializers.ListField(
             child=serializers.ListField(
-                child=serializers.ListField(
-                    child=serializers.FloatField(error_messages=geojson_error_messages),
-                    min_length=2,
-                    max_length=2,
-                    error_messages=geojson_error_messages
-                ),
-                min_length=3,
+                child=serializers.FloatField(
+                    error_messages=geojson_error_messages),
+                min_length=2,
+                max_length=2,
                 error_messages=geojson_error_messages
             ),
-            min_length=1,
-            max_length=1,
+            min_length=3,
             error_messages=geojson_error_messages
+        ),
+        min_length=1,
+        max_length=1,
+        error_messages=geojson_error_messages
     )
     # coordinates = CoordinateSerializer(many=True, read_only=True)
     provider = serializers.ReadOnlyField(source='provider.name')
@@ -86,7 +88,8 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
         # print(coordinates)
         # assert(False)
 
-        service_area = super(ServiceAreaSerializer, self).create(validated_data)
+        service_area = super(ServiceAreaSerializer,
+                             self).create(validated_data)
 
         for coordinate in coordinates[0]:
             Coordinate.objects.create(
@@ -105,7 +108,8 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
         """update service area instance as well as related coordinate instances as well"""
         coordinates_data = validated_data.pop('coordinates')
 
-        service_area = super(ServiceAreaSerializer, self).update(instance, validated_data)
+        service_area = super(ServiceAreaSerializer, self).update(
+            instance, validated_data)
 
         service_area.coordinates.all().delete()
 
@@ -120,7 +124,6 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
 
         return service_area
 
-
     def to_representation(self, instance):
         """ override base implementation, to return a service area object in a geojson format
         """
@@ -128,19 +131,19 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
         fields = self._readable_fields
 
         for field in fields:
-            
+
             try:
                 attribute = field.get_attribute(instance)
             except SkipField:
                 continue
-
 
             # We skip `to_representation` for `None` values so that fields do
             # not have to explicitly deal with that case.
             #
             # For related fields with `use_pk_only_optimization` we need to
             # resolve the pk value.
-            check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
+            check_for_none = attribute.pk if isinstance(
+                attribute, PKOnlyObject) else attribute
             if check_for_none is None:
                 ret[field.field_name] = None
             else:
@@ -157,8 +160,7 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
 
         coordinates = coordinate_field.to_representation(instance.coordinates)
         for coordinate in coordinates:
-            ret['coordinates'][0].append([coordinate['latitude'],coordinate['longitude']])
-        
-        return ret
+            ret['coordinates'][0].append(
+                [coordinate['latitude'], coordinate['longitude']])
 
-    
+        return ret

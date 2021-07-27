@@ -10,11 +10,13 @@ class Provider(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=11, unique=True)
 
-    #Language is encoded in ISO 639-1 format
-    language = models.CharField(max_length=2, help_text="ISO 639-1 code language format")
+    # Language is encoded in ISO 639-1 format
+    language = models.CharField(
+        max_length=2, help_text="ISO 639-1 code language format")
 
-    #Currency is encoded in ISO 4217 format
-    currency = models.CharField(max_length=3, help_text="ISO 4217 currency format")
+    # Currency is encoded in ISO 4217 format
+    currency = models.CharField(
+        max_length=3, help_text="ISO 4217 currency format")
 
     class Meta:
         ordering = ['id']
@@ -23,10 +25,8 @@ class Provider(models.Model):
 class ServiceArea(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField()
-    provider = models.ForeignKey(
-        'Provider', related_name='service_areas',
-        on_delete=models.CASCADE
-    )
+    provider = models.ForeignKey('Provider', related_name='service_areas',
+                                 on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['id']
@@ -35,10 +35,8 @@ class ServiceArea(models.Model):
 class Coordinate(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
-    service_area = models.ForeignKey(
-        'ServiceArea', related_name='coordinates',
-        on_delete=models.CASCADE
-    )
+    service_area = models.ForeignKey('ServiceArea', related_name='coordinates',
+                                     on_delete=models.CASCADE)
 
 
 """{

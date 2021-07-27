@@ -21,28 +21,28 @@ urlpatterns = [
         name='provider-detail'
     ),
     path(
-        'providers/<int:pk>/service-area/', 
-         views.ServiceAreaList.as_view(),
-         name='service-area-list'
+        'providers/<int:pk>/service-area/',
+        views.ServiceAreaList.as_view(),
+        name='service-area-list'
     ),
     path(
-        'service-area/<int:pk>/', 
-         views.ServiceAreaDetail.as_view(),
-         name='service-area-detail'
+        'service-area/<int:pk>/',
+        views.ServiceAreaDetail.as_view(),
+        name='service-area-detail'
     ),
     path(
-        'coordinates/', 
-         views.CoordinateList.as_view(),
-         name='coordinate-list'
+        'coordinates/',
+        views.CoordinateList.as_view(),
+        name='coordinate-list'
     ),
     path(
-        'coordinates/<int:pk>', 
-         views.CoordinateDetail.as_view(),
-         name='coordinate-detail'
+        'coordinates/<int:pk>',
+        views.CoordinateDetail.as_view(),
+        name='coordinate-detail'
     ),
     path(
-        'locate/', 
-         views.Locate.as_view(),
-         name='locate'
+        'locate/',
+        views.Locate.as_view(),
+        name='locate'
     ),
 ]

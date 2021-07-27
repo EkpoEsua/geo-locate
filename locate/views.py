@@ -44,10 +44,11 @@ class ServiceAreaList(generics.ListCreateAPIView):
         primary key
         """
         return queryset.filter(provider=Provider.objects.get(pk=self.kwargs['pk']))
-    
+
     def perform_create(self, serializer):
         data = Provider.objects.get(pk=self.kwargs['pk'])
         serializer.save(provider=data)
+
 
 class ServiceAreaDetail(generics.RetrieveUpdateDestroyAPIView):
     """Create view to give detail, update or delete a Service area"""
@@ -76,6 +77,7 @@ class CoordinateDetail(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class Locate(generics.ListAPIView):
     queryset = ServiceArea.objects.all()
     serializer_class = ServiceAreaSerializer
@@ -92,10 +94,10 @@ class Locate(generics.ListAPIView):
 
         serializer = self.get_serializer_class()
 
-        serializer = serializer(queryset, many=True, context={'request': self.request})
+        serializer = serializer(queryset, many=True, context={
+                                'request': self.request})
         list_of_service_area_id = []
 
-        print(type(serializer.data))
         for service_area in serializer.data:
             polygon = Polygon(service_area["coordinates"][0])
             if polygon.contains(point):
