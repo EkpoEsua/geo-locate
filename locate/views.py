@@ -2,16 +2,20 @@ from re import L
 from django.shortcuts import render
 from rest_framework import generics, serializers
 from locate.models import Provider, ServiceArea, Coordinate
-from locate.serializers import ProviderSerializer, ServiceAreaSerializer, CoordinateSerializer
+from locate.serializers import ProviderSerializer, SearchServiceAreasSerializer, \
+    ServiceAreaSerializer, CoordinateSerializer
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from shapely.geometry import Polygon, Point
-
+from rest_framework.schemas.openapi import AutoSchema
 
 # Create your views here.
 
 class ProviderList(generics.ListCreateAPIView):
-    """Create view to list all providers, or create a new one"""
+    """
+    - GET method - List all providers.
+    - POST method - Create a new provider.
+    """
     queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
 
@@ -21,7 +25,11 @@ class ProviderList(generics.ListCreateAPIView):
 
 
 class ProviderDetail(generics.RetrieveUpdateDestroyAPIView):
-    """Create view to give detail, update or delete a provider"""
+    """
+    - GET method - Return details of a specific provider.
+    - PATCH or PUT method - Update provider information.
+    - DELETE method - Delete a provider.
+    """
     queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
 
@@ -31,7 +39,10 @@ class ProviderDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ServiceAreaList(generics.ListCreateAPIView):
-    """Create view to List or Create a service area for a provider"""
+    """
+    - GET method - List all the service areas associated with a provider.
+    - POST method - Create a service area for the given provider.
+    """
     queryset = ServiceArea.objects.all()
     serializer_class = ServiceAreaSerializer
 
@@ -40,7 +51,7 @@ class ServiceAreaList(generics.ListCreateAPIView):
         return super().get(request, *args, **kwargs)
 
     def filter_queryset(self, queryset):
-        """Return only the service areas belonging to a specific provider identified by it's 
+        """Return only the service areas belonging to a specific provider identified by it's
         primary key
         """
         return queryset.filter(provider=Provider.objects.get(pk=self.kwargs['pk']))
@@ -51,7 +62,11 @@ class ServiceAreaList(generics.ListCreateAPIView):
 
 
 class ServiceAreaDetail(generics.RetrieveUpdateDestroyAPIView):
-    """Create view to give detail, update or delete a Service area"""
+    """
+    - GET method - Return details about a service area.
+    - PATCH or PUT method - Modifiy a service area.
+    - DELETE method - Remove a service area.
+    """
     queryset = ServiceArea.objects.all()
     serializer_class = ServiceAreaSerializer
 
@@ -78,9 +93,12 @@ class CoordinateDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class Locate(generics.ListAPIView):
+class SearchServiceAreas(generics.ListAPIView):
+    """
+    List all the service areas available at location.
+    """
     queryset = ServiceArea.objects.all()
-    serializer_class = ServiceAreaSerializer
+    serializer_class = SearchServiceAreasSerializer
 
     @method_decorator(cache_page(60*60*2))
     def get(self, request, *args, **kwargs):
@@ -92,15 +110,21 @@ class Locate(generics.ListAPIView):
 
         point = Point(float(latitude), float(longitude))
 
-        serializer = self.get_serializer_class()
-
-        serializer = serializer(queryset, many=True, context={
-                                'request': self.request})
         list_of_service_area_id = []
-
-        for service_area in serializer.data:
-            polygon = Polygon(service_area["coordinates"][0])
+        for service_area in queryset:
+            coordinates = service_area.coordinates.all()
+            polygon_points = []
+            for coordinate in coordinates:
+                polygon_points.append([coordinate.latitude,coordinate.longitude])
+            polygon = Polygon(polygon_points)
             if polygon.contains(point):
-                list_of_service_area_id.append(service_area["id"])
+                list_of_service_area_id.append(service_area.id)
 
         return queryset.filter(pk__in=list_of_service_area_id)
+    
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        response.data['results'][0].pop('coordinates')
+        response.data['results'][0].pop('id')
+        return response
+

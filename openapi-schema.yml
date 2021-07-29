@@ -1,0 +1,687 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /providers/:
+    get:
+      operationId: listProviders
+      description: '# Endpoint - "providers/"
+
+
+        GET method - List all providers
+
+        POST method - Create a new provider
+
+
+        # Endpoint - "providers/<pk>/" pk: identifies provider
+
+        link can be gotten from the json response data
+
+        i.e data.result[<index>].url'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Provider'
+          description: ''
+      tags:
+      - providers
+    post:
+      operationId: createProvider
+      description: '# Endpoint - "providers/"
+
+
+        GET method - List all providers
+
+        POST method - Create a new provider
+
+
+        # Endpoint - "providers/<pk>/" pk: identifies provider
+
+        link can be gotten from the json response data
+
+        i.e data.result[<index>].url'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Provider'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Provider'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Provider'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+          description: ''
+      tags:
+      - providers
+  /providers/{id}/:
+    get:
+      operationId: retrieveProvider
+      description: '* Endpoint - "providers/<pk>/" pk: primary key
+
+        link can be gotten from the json response data
+
+        i.e data.result[<index>].url
+
+
+        GET method - Return details of a specific provider
+
+        PATCH or PUT method - Update provider information
+
+        DELETE method - Delete a provider'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this provider.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+          description: ''
+      tags:
+      - providers
+    put:
+      operationId: updateProvider
+      description: '* Endpoint - "providers/<pk>/" pk: primary key
+
+        link can be gotten from the json response data
+
+        i.e data.result[<index>].url
+
+
+        GET method - Return details of a specific provider
+
+        PATCH or PUT method - Update provider information
+
+        DELETE method - Delete a provider'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this provider.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Provider'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Provider'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Provider'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+          description: ''
+      tags:
+      - providers
+    patch:
+      operationId: partialUpdateProvider
+      description: '* Endpoint - "providers/<pk>/" pk: primary key
+
+        link can be gotten from the json response data
+
+        i.e data.result[<index>].url
+
+
+        GET method - Return details of a specific provider
+
+        PATCH or PUT method - Update provider information
+
+        DELETE method - Delete a provider'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this provider.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Provider'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Provider'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Provider'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+          description: ''
+      tags:
+      - providers
+    delete:
+      operationId: destroyProvider
+      description: '* Endpoint - "providers/<pk>/" pk: primary key
+
+        link can be gotten from the json response data
+
+        i.e data.result[<index>].url
+
+
+        GET method - Return details of a specific provider
+
+        PATCH or PUT method - Update provider information
+
+        DELETE method - Delete a provider'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this provider.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - providers
+  /providers/{id}/service-area/:
+    get:
+      operationId: listServiceAreas
+      description: '* Endpoint - "providers/<pk>/service-area/"
+
+        - provider identified by ''pk''
+
+
+        GET method - List all the service areas associated with a provider
+
+        POST method - Create a service area for a provider'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this service area.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceArea'
+          description: ''
+      tags:
+      - providers
+    post:
+      operationId: createServiceArea
+      description: '* Endpoint - "providers/<pk>/service-area/"
+
+        - provider identified by ''pk''
+
+
+        GET method - List all the service areas associated with a provider
+
+        POST method - Create a service area for a provider'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this service area.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceArea'
+          description: ''
+      tags:
+      - providers
+  /service-area/{id}/:
+    get:
+      operationId: retrieveServiceArea
+      description: "* Endpoint - \"service-area/<pk>/\"\n- pk identifies a service\
+        \ area \n\nGET method - Return details about a service area\nPATCH or PUT\
+        \ method - Modifiy a service area\nDELETE method - Remove a service area"
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this service area.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceArea'
+          description: ''
+      tags:
+      - service-area
+    put:
+      operationId: updateServiceArea
+      description: "* Endpoint - \"service-area/<pk>/\"\n- pk identifies a service\
+        \ area \n\nGET method - Return details about a service area\nPATCH or PUT\
+        \ method - Modifiy a service area\nDELETE method - Remove a service area"
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this service area.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceArea'
+          description: ''
+      tags:
+      - service-area
+    patch:
+      operationId: partialUpdateServiceArea
+      description: "* Endpoint - \"service-area/<pk>/\"\n- pk identifies a service\
+        \ area \n\nGET method - Return details about a service area\nPATCH or PUT\
+        \ method - Modifiy a service area\nDELETE method - Remove a service area"
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this service area.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceArea'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceArea'
+          description: ''
+      tags:
+      - service-area
+    delete:
+      operationId: destroyServiceArea
+      description: "* Endpoint - \"service-area/<pk>/\"\n- pk identifies a service\
+        \ area \n\nGET method - Return details about a service area\nPATCH or PUT\
+        \ method - Modifiy a service area\nDELETE method - Remove a service area"
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this service area.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - service-area
+  /coordinates/:
+    get:
+      operationId: listCoordinates
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Coordinate'
+          description: ''
+      tags:
+      - coordinates
+  /coordinates/{id}:
+    get:
+      operationId: retrieveCoordinate
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this coordinate.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coordinate'
+          description: ''
+      tags:
+      - coordinates
+    put:
+      operationId: updateCoordinate
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this coordinate.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coordinate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Coordinate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Coordinate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coordinate'
+          description: ''
+      tags:
+      - coordinates
+    patch:
+      operationId: partialUpdateCoordinate
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this coordinate.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coordinate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Coordinate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Coordinate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coordinate'
+          description: ''
+      tags:
+      - coordinates
+    delete:
+      operationId: destroyCoordinate
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this coordinate.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - coordinates
+  /locate/:
+    get:
+      operationId: listServiceAreas
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceArea'
+          description: ''
+      tags:
+      - locate
+components:
+  schemas:
+    Provider:
+      type: object
+      properties:
+        url:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone_number:
+          type: string
+          maxLength: 11
+        language:
+          type: string
+          description: ISO 639-1 code language format
+          maxLength: 2
+        currency:
+          type: string
+          description: ISO 4217 currency format
+          maxLength: 3
+        service_area_list:
+          type: string
+          readOnly: true
+        service_areas:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - name
+      - email
+      - phone_number
+      - language
+      - currency
+    ServiceArea:
+      type: object
+      properties:
+        url:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        price:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        provider:
+          type: string
+          readOnly: true
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+          maxItems: 1
+          minItems: 1
+      required:
+      - name
+      - price
+      - coordinates
+    Coordinate:
+      type: object
+      properties:
+        url:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        latitude:
+          type: number
+        longitude:
+          type: number
+        service_area:
+          type: string
+          readOnly: true
+      required:
+      - latitude
+      - longitude

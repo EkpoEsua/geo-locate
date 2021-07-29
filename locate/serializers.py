@@ -129,6 +129,7 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
         """
         ret = OrderedDict()
         fields = self._readable_fields
+        # print(fields[0])
 
         for field in fields:
 
@@ -164,3 +165,10 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
                 [coordinate['latitude'], coordinate['longitude']])
 
         return ret
+
+
+class SearchServiceAreasSerializer(ServiceAreaSerializer):
+
+    class Meta:
+        model = ServiceArea
+        fields = ['id', 'name', 'provider', 'price', 'coordinates']
