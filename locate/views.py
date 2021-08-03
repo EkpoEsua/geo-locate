@@ -124,7 +124,8 @@ class SearchServiceAreas(generics.ListAPIView):
     
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response.data['results'][0].pop('coordinates')
-        response.data['results'][0].pop('id')
+        for service_area in response.data['results']:
+            service_area.pop('coordinates')
+            service_area.pop('id')
         return response
 
