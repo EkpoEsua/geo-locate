@@ -39,4 +39,4 @@ Hosted on: https://esuaekpo.pythonanywhere.com/
 pk - primary key of existing provider
 
 * locate/ - api for searching for service areas in a specific point 
-    sample query parameters: ?lat=1&lon=2 - values must be intergers
+    sample query parameters: ?lat=1&lon=2 - values must be float.
