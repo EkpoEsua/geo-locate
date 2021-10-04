@@ -14,10 +14,6 @@ from pathlib import Path
 import os
 import sys
 
-c = 0
-c += 1
-print(dir())
-print(__spec__.loader.name)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
 
     'rest_framework',
     'locate.apps.LocateConfig'
@@ -83,39 +80,28 @@ WSGI_APPLICATION = 'geo_locate.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'pg4e_73e62c98b5',
-#         'USER': 'pg4e_73e62c98b5',
-#         'PASSWORD': 'pg4e_p_2d584db4d3fe9a8',
-#         'HOST': 'pg.pg4e.com',
-#         'PORT': '5432',
-#     }
-# }
-
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd2uttpnqa0fpck',
-#         'USER': 'elqryjkhxfeght',
-#         'PASSWORD': '52f0b42cca360b2d1040ac94c7021596b9dd2b2725f2cfb704f0003eb9530824',
-#         'HOST': 'ec2-52-19-170-215.eu-west-1.compute.amazonaws.com',
-#         'PORT': '5432',
-#         'TEST': {
-#             'NAME': 'd2uttpnqa0fpck',
-#         },
-#     },
-# }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'd2uttpnqa0fpck',
+        'USER': 'elqryjkhxfeght',
+        'PASSWORD': '52f0b42cca360b2d1040ac94c7021596b9dd2b2725f2cfb704f0003eb9530824',
+        'HOST': 'ec2-52-19-170-215.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432',
+        'CONN_MAX_AGE': None,
+    },
 }
+
+# psql -h ec2-52-19-170-215.eu-west-1.compute.amazonaws.com -p 5432 -U elqryjkhxfeght d2uttpnqa0fpck
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

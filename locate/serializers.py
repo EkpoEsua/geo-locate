@@ -4,7 +4,7 @@ from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.fields import SkipField
 from rest_framework.relations import PKOnlyObject
-from .models import Provider, ServiceArea, Coordinate
+from .models import Provider, ServiceArea # Coordinate
 
 message = 'Invalid geojson data'
 geojson_error_messages = {
@@ -45,7 +45,7 @@ class CoordinateSerializer(serializers.HyperlinkedModelSerializer):
     service_area = serializers.ReadOnlyField(source='service_area.name')
 
     class Meta:
-        model = Coordinate
+        # model = Coordinate
         fields = ['url', 'id', 'latitude', 'longitude', 'service_area']
 
 
@@ -91,12 +91,12 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
         service_area = super(ServiceAreaSerializer,
                              self).create(validated_data)
 
-        for coordinate in coordinates[0]:
-            Coordinate.objects.create(
-                latitude=coordinate[0],
-                longitude=coordinate[1],
-                service_area=service_area
-            )
+        # for coordinate in coordinates[0]:
+        #     Coordinate.objects.create(
+        #         latitude=coordinate[0],
+        #         longitude=coordinate[1],
+        #         service_area=service_area
+        #     )
 
         # coordinate_serializer = CoordinateSerializer(data=coordinates, many=True)
         # coordinate_serializer.is_valid(raise_exception=True)
@@ -113,12 +113,12 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
 
         service_area.coordinates.all().delete()
 
-        for coordinate in coordinates_data[0]:
-            Coordinate.objects.create(
-                latitude=coordinate[0],
-                longitude=coordinate[1],
-                service_area=service_area
-            )
+        # for coordinate in coordinates_data[0]:
+        #     Coordinate.objects.create(
+        #         latitude=coordinate[0],
+        #         longitude=coordinate[1],
+        #         service_area=service_area
+        #     )
 
         # assert(False)
 

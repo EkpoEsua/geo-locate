@@ -1,7 +1,7 @@
 from re import L
 from django.shortcuts import render
 from rest_framework import generics, serializers
-from locate.models import Provider, ServiceArea, Coordinate
+from locate.models import Provider, ServiceArea # Coordinate
 from locate.serializers import ProviderSerializer, SearchServiceAreasSerializer, \
     ServiceAreaSerializer, CoordinateSerializer
 from django.views.decorators.cache import cache_page
@@ -75,22 +75,22 @@ class ServiceAreaDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class CoordinateList(generics.ListAPIView):
-    queryset = Coordinate.objects.all()
-    serializer_class = CoordinateSerializer
+# class CoordinateList(generics.ListAPIView):
+#     queryset = Coordinate.objects.all()
+#     serializer_class = CoordinateSerializer
 
-    @method_decorator(cache_page(60*60*2))
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+#     @method_decorator(cache_page(60*60*2))
+#     def get(self, request, *args, **kwargs):
+#         return super().get(request, *args, **kwargs)
 
 
-class CoordinateDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Coordinate.objects.all()
-    serializer_class = CoordinateSerializer
+# class CoordinateDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Coordinate.objects.all()
+#     serializer_class = CoordinateSerializer
 
-    @method_decorator(cache_page(60*60*2))
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+#     @method_decorator(cache_page(60*60*2))
+#     def get(self, request, *args, **kwargs):
+#         return super().get(request, *args, **kwargs)
 
 
 class SearchServiceAreas(generics.ListAPIView):

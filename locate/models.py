@@ -1,42 +1,39 @@
-from django.db import models
-from django.db.models.deletion import CASCADE
-from django.db.models.expressions import Case
-
-# Create your models here.
+from django.contrib.gis.db import models
 
 
 class Provider(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=11, unique=True)
 
     # Language is encoded in ISO 639-1 format
     language = models.CharField(
-        max_length=2, help_text="ISO 639-1 code language format")
+        max_length=2, help_text="ISO 639-1 code language format"
+    )
 
     # Currency is encoded in ISO 4217 format
-    currency = models.CharField(
-        max_length=3, help_text="ISO 4217 currency format")
+    currency = models.CharField(max_length=3, help_text="ISO 4217 currency format")
 
     class Meta:
-        ordering = ['id']
+        ordering = ["id"]
 
 
 class ServiceArea(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField()
-    provider = models.ForeignKey('Provider', related_name='service_areas',
-                                 on_delete=models.CASCADE)
+    provider = models.ForeignKey(
+        "Provider", related_name="service_areas", on_delete=models.CASCADE
+    )
+    polygon = models.PolygonField()
 
     class Meta:
-        ordering = ['id']
+        ordering = ["id"]
 
 
-class Coordinate(models.Model):
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    service_area = models.ForeignKey('ServiceArea', related_name='coordinates',
-                                     on_delete=models.CASCADE)
+
+
+
+
 
 
 """{

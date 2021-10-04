@@ -73,16 +73,16 @@ urlpatterns = [
         views.ServiceAreaDetail.as_view(),
         name='service-area-detail'
     ),
-    path(
-        'coordinates/',
-        views.CoordinateList.as_view(),
-        name='coordinate-list'
-    ),
-    path(
-        'coordinates/<int:pk>',
-        views.CoordinateDetail.as_view(),
-        name='coordinate-detail'
-    ),
+    # path(
+    #     'coordinates/',
+    #     views.CoordinateList.as_view(),
+    #     name='coordinate-list'
+    # ),
+    # path(
+    #     'coordinates/<int:pk>',
+    #     views.CoordinateDetail.as_view(),
+    #     name='coordinate-detail'
+    # ),
     path(
         'search/',
         views.SearchServiceAreas.as_view(),

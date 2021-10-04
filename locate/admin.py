@@ -1,3 +1,5 @@
-from django.contrib import admin
+from django.contrib.gis import admin
+from .models import ServiceArea, Provider
 
-# Register your models here.
+admin.site.register(ServiceArea, admin.GeoModelAdmin)
+admin.site.register(Provider, admin.GeoModelAdmin)
