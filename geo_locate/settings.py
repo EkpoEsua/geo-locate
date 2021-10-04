@@ -14,11 +14,6 @@ from pathlib import Path
 import os
 import sys
 
-c = 0
-c += 1
-print(dir())
-print(__spec__.loader.name)
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -83,32 +78,7 @@ WSGI_APPLICATION = 'geo_locate.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'pg4e_73e62c98b5',
-#         'USER': 'pg4e_73e62c98b5',
-#         'PASSWORD': 'pg4e_p_2d584db4d3fe9a8',
-#         'HOST': 'pg.pg4e.com',
-#         'PORT': '5432',
-#     }
-# }
 
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd2uttpnqa0fpck',
-#         'USER': 'elqryjkhxfeght',
-#         'PASSWORD': '52f0b42cca360b2d1040ac94c7021596b9dd2b2725f2cfb704f0003eb9530824',
-#         'HOST': 'ec2-52-19-170-215.eu-west-1.compute.amazonaws.com',
-#         'PORT': '5432',
-#         'TEST': {
-#             'NAME': 'd2uttpnqa0fpck',
-#         },
-#     },
-# }
 
 DATABASES = {
     'default': {
