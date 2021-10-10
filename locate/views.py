@@ -1,11 +1,11 @@
 from re import L
 from django.shortcuts import render
-from rest_framework import generics, serializers
+from rest_framework import generics
 from locate.models import Provider, ServiceArea
 from locate.serializers import (
-    ProviderSerializer, 
+    ProviderSerializer,
     SearchServiceAreasSerializer,
-    ServiceAreaSerializer
+    ServiceAreaSerializer,
 )
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError, BadRequest
@@ -13,11 +13,13 @@ from rest_framework.schemas.openapi import AutoSchema
 
 # Create your views here.
 
+
 class ProviderList(generics.ListCreateAPIView):
     """
     - GET method - List all providers.
     - POST method - Create a new provider.
     """
+
     queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
 
@@ -31,6 +33,7 @@ class ProviderDetail(generics.RetrieveUpdateDestroyAPIView):
     - PATCH or PUT method - Update provider information.
     - DELETE method - Delete a provider.
     """
+
     queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
 
@@ -43,6 +46,7 @@ class ServiceAreaList(generics.ListCreateAPIView):
     - GET method - List all the service areas associated with a provider.
     - POST method - Create a service area for the given provider.
     """
+
     queryset = ServiceArea.objects.all()
     serializer_class = ServiceAreaSerializer
 
@@ -53,10 +57,10 @@ class ServiceAreaList(generics.ListCreateAPIView):
         """Return only the service areas belonging to a specific provider identified by it's
         primary key
         """
-        return queryset.filter(provider=Provider.objects.get(pk=self.kwargs['pk']))
+        return queryset.filter(provider=Provider.objects.get(pk=self.kwargs["pk"]))
 
     def perform_create(self, serializer):
-        data = Provider.objects.get(pk=self.kwargs['pk'])
+        data = Provider.objects.get(pk=self.kwargs["pk"])
         serializer.save(provider=data)
 
 
@@ -66,24 +70,29 @@ class ServiceAreaDetail(generics.RetrieveUpdateDestroyAPIView):
     - PATCH or PUT method - Modifiy a service area.
     - DELETE method - Remove a service area.
     """
+
     queryset = ServiceArea.objects.all()
     serializer_class = ServiceAreaSerializer
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class SearchServiceAreas(generics.ListAPIView):
     """
     List all the service areas available at location.
     """
+
     queryset = ServiceArea.objects.all()
     serializer_class = SearchServiceAreasSerializer
 
     def filter_queryset(self, queryset):
-        latitude = self.request.GET.get("lat", 0)
-        longitude = self.request.GET.get("lon", 0)
+        latitude = self.request.GET.get("lat", None)
+        longitude = self.request.GET.get("lon", None)
+
+        # if (latitude is None) or (longitude is None):
+        #     raise BadRequest
 
         point = Point(float(latitude), float(longitude))
 
         return queryset.filter(polygon__contains=point)
-
