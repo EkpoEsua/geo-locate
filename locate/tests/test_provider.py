@@ -4,7 +4,7 @@ from django.urls.base import resolve
 from rest_framework.test import APITestCase
 from rest_framework import status
 from locate.models import Provider, ServiceArea
-from locate.tests.coordinates_n_providers import providers
+from locate.tests.data import providers
 
 
 class ProviderTest(APITestCase):
@@ -127,7 +127,3 @@ class ProviderTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # def test_creation_of_service_area_for_a_provider(self):
-    #     """
-    #     Test provider has created service area
-    #     """

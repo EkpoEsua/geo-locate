@@ -13,7 +13,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import sys
+import configparser
 
+# Get configuration information for Django.
+config = configparser.ConfigParser(interpolation=None)
+config.read("geo_locate/config.ini")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!^h26)rbnl3mv^uv)%94unvwjifq18p3t#$q4w$bxzadt0s8r3'
+SECRET_KEY = config["django"]["secret"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -84,24 +88,20 @@ WSGI_APPLICATION = 'geo_locate.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'd2uttpnqa0fpck',
-        'USER': 'elqryjkhxfeght',
-        'PASSWORD': '52f0b42cca360b2d1040ac94c7021596b9dd2b2725f2cfb704f0003eb9530824',
-        'HOST': 'ec2-52-19-170-215.eu-west-1.compute.amazonaws.com',
-        'PORT': '5432',
+        'NAME': config["postgresql"]["name"],
+        'USER': config["postgresql"]["user"],
+        'PASSWORD': config["postgresql"]["password"],
+        'HOST': config["postgresql"]["host"],
+        'PORT': config["postgresql"]["port"],
         'CONN_MAX_AGE': None,
     },
+    'test': {
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
-# psql -h ec2-52-19-170-215.eu-west-1.compute.amazonaws.com -p 5432 -U elqryjkhxfeght d2uttpnqa0fpck
 
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.contrib.gis.db.backends.spatialite',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

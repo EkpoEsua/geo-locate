@@ -1,12 +1,14 @@
 from re import L
 from django.shortcuts import render
 from rest_framework import generics, serializers
-from locate.models import Provider, ServiceArea # Coordinate
-from locate.serializers import ProviderSerializer, SearchServiceAreasSerializer, \
-    ServiceAreaSerializer, CoordinateSerializer
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
-from shapely.geometry import Polygon, Point
+from locate.models import Provider, ServiceArea
+from locate.serializers import (
+    ProviderSerializer, 
+    SearchServiceAreasSerializer,
+    ServiceAreaSerializer
+)
+from django.contrib.gis.geos import Point
+from django.core.exceptions import ValidationError, BadRequest
 from rest_framework.schemas.openapi import AutoSchema
 
 # Create your views here.
@@ -19,7 +21,6 @@ class ProviderList(generics.ListCreateAPIView):
     queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -33,7 +34,6 @@ class ProviderDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -46,7 +46,6 @@ class ServiceAreaList(generics.ListCreateAPIView):
     queryset = ServiceArea.objects.all()
     serializer_class = ServiceAreaSerializer
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -70,28 +69,8 @@ class ServiceAreaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ServiceArea.objects.all()
     serializer_class = ServiceAreaSerializer
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
-
-# class CoordinateList(generics.ListAPIView):
-#     queryset = Coordinate.objects.all()
-#     serializer_class = CoordinateSerializer
-
-#     @method_decorator(cache_page(60*60*2))
-#     def get(self, request, *args, **kwargs):
-#         return super().get(request, *args, **kwargs)
-
-
-# class CoordinateDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Coordinate.objects.all()
-#     serializer_class = CoordinateSerializer
-
-#     @method_decorator(cache_page(60*60*2))
-#     def get(self, request, *args, **kwargs):
-#         return super().get(request, *args, **kwargs)
-
 
 class SearchServiceAreas(generics.ListAPIView):
     """
@@ -100,32 +79,11 @@ class SearchServiceAreas(generics.ListAPIView):
     queryset = ServiceArea.objects.all()
     serializer_class = SearchServiceAreasSerializer
 
-    @method_decorator(cache_page(60*60*2))
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
     def filter_queryset(self, queryset):
-        latitude = self.request.GET['lat']
-        longitude = self.request.GET['lon']
+        latitude = self.request.GET.get("lat", 0)
+        longitude = self.request.GET.get("lon", 0)
 
         point = Point(float(latitude), float(longitude))
 
-        list_of_service_area_id = []
-        for service_area in queryset:
-            coordinates = service_area.coordinates.all()
-            polygon_points = []
-            for coordinate in coordinates:
-                polygon_points.append([coordinate.latitude,coordinate.longitude])
-            polygon = Polygon(polygon_points)
-            if polygon.contains(point):
-                list_of_service_area_id.append(service_area.id)
-
-        return queryset.filter(pk__in=list_of_service_area_id)
-    
-    def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
-        for service_area in response.data['results']:
-            service_area.pop('coordinates')
-            service_area.pop('id')
-        return response
+        return queryset.filter(polygon__contains=point)
 
