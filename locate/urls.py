@@ -3,6 +3,8 @@ from django.urls.base import reverse_lazy
 from django.views.generic.base import RedirectView, TemplateView
 from locate import views
 from rest_framework.schemas import get_schema_view
+from django.views.decorators.cache import cache_page
+
 
 # app_name = 'locate'
 description = """
@@ -35,57 +37,32 @@ The result of a search consists of:
 - Provider name
 
 """
+
 urlpatterns = [
     path(
-        '',
+        "",
         TemplateView.as_view(
-            template_name='locate/swagger-ui.html',
-            extra_context={'schema_url':'schema'}
-        ), 
-        name='swagger-ui'
-    ),
-    path(
-        'schema/',
-        get_schema_view(
-             title='Geo Locate',
-             description=description,
-             version='1.0.0'
+            template_name="locate/swagger-ui.html",
+            extra_context={"schema_url": "schema"},
         ),
-        name='schema'
+        name="swagger-ui",
     ),
     path(
-        'providers/',
-        views.ProviderList.as_view(),
-        name='provider-list'
+        "schema/",
+        get_schema_view(title="Geo Locate", description=description, version="1.0.0"),
+        name="schema",
     ),
+    path("providers/", views.ProviderList.as_view(), name="provider-list"),
+    path("providers/<int:pk>/", views.ProviderDetail.as_view(), name="provider-detail"),
     path(
-        'providers/<int:pk>/',
-        views.ProviderDetail.as_view(),
-        name='provider-detail'
-    ),
-    path(
-        'providers/<int:pk>/service-area/',
+        "providers/<int:pk>/service-area/",
         views.ServiceAreaList.as_view(),
-        name='service-area-list'
+        name="service-area-list",
     ),
     path(
-        'service-area/<int:pk>/',
+        "service-area/<int:pk>/",
         views.ServiceAreaDetail.as_view(),
-        name='service-area-detail'
+        name="service-area-detail",
     ),
-    path(
-        'coordinates/',
-        views.CoordinateList.as_view(),
-        name='coordinate-list'
-    ),
-    path(
-        'coordinates/<int:pk>',
-        views.CoordinateDetail.as_view(),
-        name='coordinate-detail'
-    ),
-    path(
-        'search/',
-        views.SearchServiceAreas.as_view(),
-        name='locate'
-    ),
+    path("search/", cache_page(60 * 5)(views.SearchServiceAreas.as_view()), name="locate"),
 ]
