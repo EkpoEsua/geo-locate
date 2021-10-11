@@ -1,6 +1,9 @@
-import django
+from django.contrib.gis.forms import widgets
 from rest_framework import serializers
-from .models import Provider, ServiceArea  # Coordinate
+from rest_framework.fields import ModelField
+from .models import Provider, ServiceArea
+from django.contrib.gis.forms.fields import PolygonField
+from django.contrib.gis.forms.widgets import BaseGeometryWidget
 
 
 message = "Invalid geojson data"
@@ -46,6 +49,9 @@ class ServiceAreaSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="service-area-detail")
     provider = serializers.StringRelatedField()
     id = serializers.ReadOnlyField()
+    # polygon = ModelField(
+    #     model_field=ServiceArea()._meta.get_field("polygon"),
+    # )
 
     class Meta:
         model = ServiceArea
